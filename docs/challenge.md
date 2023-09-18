@@ -44,3 +44,9 @@ Investigando, parece que anyio introdujo ciertos cambios en la version 4.0.0 que
 La solución fue hacer un version downgrade: pip install anyio==3.4.0.
 
 
+# Part III
+Se decide utilizar GCP. 
+URL API: https://mlechallengeimage-3z6cfqfdaq-ue.a.run.app
+
+Para probar los tests de stress tuve que isntalar una librería faltante que no se encontraba en requirements.txt: 
+pip3 install locust
