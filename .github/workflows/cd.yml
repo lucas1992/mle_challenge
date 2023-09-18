@@ -1,0 +1,25 @@
+name: 'Continuous Delivery'
+
+
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up Google Cloud SDK
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '330.0.0'
+        project_id: ${{secrets.GCP_PROJECT_ID}}
+        service_account_key: ${{secrets.GCP_SA_KEY}}
+
+    - name: Desplegar en Google Cloud Run
+      run: |
+        gcloud config set run/region us-east1
+        gcloud run deploy mleChallenge --image gcr.io/mlechallenge/mle_challenge_image --platform managed --allow-unauthenticated
