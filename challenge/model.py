@@ -71,6 +71,8 @@ class DelayModel:
         return min_diff
     
     def features_generation(self, data: pd.DataFrame) -> pd.DataFrame:
+        if 'Fecha-I' not in data.columns or 'Fecha-O' not in data.columns:
+            return data
         data['period_day'] = data['Fecha-I'].apply(self.get_period_day)
         data['high_season'] = data['Fecha-I'].apply(self.is_high_season)
         data['min_diff'] = data.apply(self.get_min_diff, axis = 1)
@@ -81,14 +83,16 @@ class DelayModel:
         
     def preprocess(self, data: pd.DataFrame, target_column: str = None) -> Union[Tuple[pd.DataFrame, pd.DataFrame], pd.DataFrame]:
         # Manejo de valores faltantes
-        # data.fillna(0, inplace=True)
-        data = self.features_generation(data) 
+        data = self.features_generation(data)
         features = pd.concat([
             pd.get_dummies(data['OPERA'], prefix = 'OPERA'),
             pd.get_dummies(data['TIPOVUELO'], prefix = 'TIPOVUELO'), 
             pd.get_dummies(data['MES'], prefix = 'MES')], 
             axis = 1
         )
+        for feature in self.FEATURES_COLS:
+            if feature not in features:
+                features[feature] = 0
         features_top_10 = features[self.FEATURES_COLS]
         if target_column:
             target = data[[target_column]]

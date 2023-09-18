@@ -35,3 +35,12 @@ Se eligió Logistic Regression sobre XGBoost por los siguientes motivos:
 En resumen, aunque ambos modelos tienen un rendimiento similar en el conjunto de datos, se optó por Logistic Regression debido a su interpretabilidad y eficiencia en tiempo real.
 
 
+# Part II
+## Bugs
+
+### 1. Problema con anyio
+pip list me mostró que tenía instalado anyio version 4.0.0. Me generaba un error las pruebas: AttributeError: module 'anyio' has no attribute 'start_blocking_portal'.
+Investigando, parece que anyio introdujo ciertos cambios en la version 4.0.0 que estaban causando los problemas con mi entorno de trabajo.
+La solución fue hacer un version downgrade: pip install anyio==3.4.0.
+
+
